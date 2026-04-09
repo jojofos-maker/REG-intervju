@@ -1,0 +1,892 @@
+<!DOCTYPE html>
+<html lang="no">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>REG Intervjutrener — Johan Jørgen Fossli</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --bg: #ffffff;
+    --bg2: #f5f5f3;
+    --bg3: #eeede8;
+    --text: #1a1a18;
+    --text2: #6b6b67;
+    --text3: #9a9a96;
+    --border: rgba(0,0,0,0.12);
+    --border2: rgba(0,0,0,0.22);
+    --info-bg: #e6f1fb;
+    --info-text: #0c447c;
+    --success-bg: #eaf3de;
+    --success-text: #27500a;
+    --warn-bg: #faeeda;
+    --warn-text: #633806;
+    --radius: 8px;
+    --radius-lg: 12px;
+    --blue: #378ADD;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #1c1c1a;
+      --bg2: #252523;
+      --bg3: #2e2e2b;
+      --text: #f0efea;
+      --text2: #a0a09b;
+      --text3: #6b6b67;
+      --border: rgba(255,255,255,0.10);
+      --border2: rgba(255,255,255,0.20);
+      --info-bg: #0c2d4a;
+      --info-text: #85b7eb;
+      --success-bg: #17340a;
+      --success-text: #97c459;
+      --warn-bg: #2e1e05;
+      --warn-text: #ef9f27;
+    }
+  }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+    background: var(--bg3);
+    color: var(--text);
+    font-size: 16px;
+    line-height: 1.6;
+    min-height: 100vh;
+  }
+  .outer { max-width: 640px; margin: 0 auto; padding: 1rem; }
+  header { padding: 1.2rem 0 0.4rem; }
+  header h1 { font-size: 20px; font-weight: 600; }
+  header p { font-size: 13px; color: var(--text2); margin-top: 2px; }
+  .nav { display: flex; gap: 6px; margin: 1rem 0; flex-wrap: wrap; }
+  .nav-btn {
+    font-family: inherit;
+    font-size: 13px;
+    padding: 7px 14px;
+    border: 0.5px solid var(--border2);
+    background: var(--bg);
+    border-radius: var(--radius);
+    cursor: pointer;
+    color: var(--text2);
+    transition: background 0.15s;
+  }
+  .nav-btn:hover { background: var(--bg2); }
+  .nav-btn.active { background: var(--info-bg); color: var(--info-text); border-color: transparent; font-weight: 500; }
+  .section { display: none; }
+  .section.active { display: block; }
+  .card {
+    background: var(--bg);
+    border: 0.5px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: 1rem 1.25rem;
+    margin-bottom: 1rem;
+  }
+  .tag {
+    display: inline-block;
+    font-size: 11px;
+    font-weight: 600;
+    padding: 3px 9px;
+    border-radius: var(--radius);
+    margin-bottom: 8px;
+    letter-spacing: 0.02em;
+  }
+  .tag-info { background: var(--info-bg); color: var(--info-text); }
+  .tag-warn { background: var(--warn-bg); color: var(--warn-text); }
+  .tag-success { background: var(--success-bg); color: var(--success-text); }
+  .tag-gray { background: var(--bg2); color: var(--text2); }
+  .q { font-size: 15px; font-weight: 600; margin: 0 0 6px 0; line-height: 1.4; }
+  .context { font-size: 13px; color: var(--text2); font-style: italic; margin: 0 0 10px 0; line-height: 1.5; }
+  .answer-box {
+    font-size: 14px;
+    line-height: 1.65;
+    background: var(--bg2);
+    border-radius: var(--radius);
+    padding: 10px 14px;
+    margin-top: 8px;
+    white-space: pre-wrap;
+    display: none;
+  }
+  .answer-box.visible { display: block; }
+  textarea.edit-box {
+    width: 100%;
+    font-family: inherit;
+    font-size: 14px;
+    line-height: 1.65;
+    background: var(--bg);
+    border: 0.5px solid var(--border2);
+    border-radius: var(--radius);
+    padding: 10px 14px;
+    color: var(--text);
+    resize: vertical;
+    min-height: 110px;
+    display: none;
+    margin-top: 8px;
+  }
+  textarea.edit-box.visible { display: block; }
+  .btn-row { display: flex; gap: 8px; margin-top: 10px; flex-wrap: wrap; }
+  .btn {
+    font-family: inherit;
+    font-size: 13px;
+    padding: 7px 14px;
+    border: 0.5px solid var(--border2);
+    background: transparent;
+    border-radius: var(--radius);
+    cursor: pointer;
+    color: var(--text);
+    transition: background 0.15s;
+  }
+  .btn:hover { background: var(--bg2); }
+  .btn-edit { color: var(--info-text); border-color: var(--info-text); }
+  h2 { font-size: 16px; font-weight: 600; margin: 1.2rem 0 0.5rem 0; color: var(--text2); text-transform: uppercase; letter-spacing: 0.05em; font-size: 11px; }
+  h3 { font-size: 15px; font-weight: 600; margin: 0 0 6px 0; }
+  .intro-text { font-size: 14px; color: var(--text2); margin-bottom: 1rem; line-height: 1.6; }
+  .step { display: flex; gap: 12px; align-items: flex-start; margin-bottom: 12px; }
+  .step-num {
+    width: 28px; height: 28px; border-radius: 50%;
+    background: var(--info-bg); color: var(--info-text);
+    font-size: 13px; font-weight: 600;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0; margin-top: 2px;
+  }
+  .step-text { font-size: 14px; line-height: 1.5; padding-top: 4px; }
+  .step-text strong { font-weight: 600; }
+  .tip-box { background: var(--success-bg); border-radius: var(--radius); padding: 10px 14px; font-size: 13px; color: var(--success-text); line-height: 1.5; margin-bottom: 10px; }
+  .warn-box { background: var(--warn-bg); border-radius: var(--radius); padding: 10px 14px; font-size: 13px; color: var(--warn-text); line-height: 1.5; margin-bottom: 10px; }
+  .static-box { font-size: 14px; line-height: 1.65; background: var(--bg2); border-radius: var(--radius); padding: 10px 14px; white-space: pre-wrap; }
+  .check-row { display: flex; align-items: center; gap: 12px; padding: 10px 0; border-bottom: 0.5px solid var(--border); }
+  .check-row:last-child { border-bottom: none; }
+  .check-row input[type=checkbox] { width: 20px; height: 20px; cursor: pointer; accent-color: var(--blue); flex-shrink: 0; }
+  .check-row label { font-size: 14px; cursor: pointer; line-height: 1.4; }
+</style>
+</head>
+<body>
+<div class="outer">
+  <header>
+    <h1>REG Intervjutrener</h1>
+    <p>Avdelingsdirektør Innsamling &mdash; Andregangsintervju 13. april kl. 13:00 &mdash; Haraldrudveien 20</p>
+  </header>
+
+  <div class="nav">
+    <button class="nav-btn active" onclick="showSection('sporsmal', this)">Spørsmål</button>
+    <button class="nav-btn" onclick="showSection('map', this)">MAP-profil</button>
+    <button class="nav-btn" onclick="showSection('case', this)">Case</button>
+    <button class="nav-btn" onclick="showSection('fakta', this)">REG-fakta</button>
+    <button class="nav-btn" onclick="showSection('sjekkliste', this)">Sjekkliste</button>
+  </div>
+
+  <!-- SPØRSMÅL -->
+  <div id="sporsmal" class="section active">
+
+    <h2>Om deg og erfaringen</h2>
+
+    <div class="card">
+      <span class="tag tag-info">Åpning</span>
+      <p class="q">«Kan du fortelle litt om deg selv og hvorfor du søker denne stillingen?»</p>
+      <div class="btn-row">
+        <button class="btn" onclick="toggleAnswer(this)">Vis svar</button>
+        <button class="btn btn-edit" onclick="toggleEdit(this)">Rediger</button>
+      </div>
+      <div class="answer-box" data-key="q1">20 år i operativ avfallsdrift — og jeg har aldri mistet kontakten med det operative. Jeg har ledet LiBiR IKS i 16 år, bygget organisasjonen fra bunnen, håndtert alt fra fagforeningsforhandlinger til digitale innføringer og kontraktskriser. Jeg søker ikke denne stillingen for å snu alt — jeg søker den for å bidra til det neste kapittelet i en etat jeg allerede har dyp respekt for.</div>
+      <textarea class="edit-box" data-key="q1">20 år i operativ avfallsdrift — og jeg har aldri mistet kontakten med det operative. Jeg har ledet LiBiR IKS i 16 år, bygget organisasjonen fra bunnen, håndtert alt fra fagforeningsforhandlinger til digitale innføringer og kontraktskriser. Jeg søker ikke denne stillingen for å snu alt — jeg søker den for å bidra til det neste kapittelet i en etat jeg allerede har dyp respekt for.</textarea>
+    </div>
+
+    <div class="card">
+      <span class="tag tag-info">Skalasprang</span>
+      <p class="q">«Du har ledet 26 ansatte. Her er det 200. Hva gjør deg trygg på at du kan håndtere det?»</p>
+      <p class="context">Ventes — ha et konkret svar, ikke generelle ord.</p>
+      <div class="btn-row">
+        <button class="btn" onclick="toggleAnswer(this)">Vis svar</button>
+        <button class="btn btn-edit" onclick="toggleEdit(this)">Rediger</button>
+      </div>
+      <div class="answer-box" data-key="q2">Jeg har ledet gjennom mellomledere hele karrieren — det er ikke et nytt grep for meg. I LiBiR var vi 26, men vi hadde underleverandører, sesongarbeidere og kontraktsparter som til sammen utgjorde en vesentlig større organisasjon å koordinere. Det jeg tar med meg hit er ikke antallet — det er systemet: tydelige forventninger, tillitsvalgte som ressurs, og en kultur der avvik meldes opp istedenfor å skjules.</div>
+      <textarea class="edit-box" data-key="q2">Jeg har ledet gjennom mellomledere hele karrieren — det er ikke et nytt grep for meg. I LiBiR var vi 26, men vi hadde underleverandører, sesongarbeidere og kontraktsparter som til sammen utgjorde en vesentlig større organisasjon å koordinere. Det jeg tar med meg hit er ikke antallet — det er systemet: tydelige forventninger, tillitsvalgte som ressurs, og en kultur der avvik meldes opp istedenfor å skjules.</textarea>
+    </div>
+
+    <div class="card">
+      <span class="tag tag-warn">Agder Miljø</span>
+      <p class="q">«Agder Miljø ble avviklet ganske raskt. Hva skjedde, og hva lærte du?»</p>
+      <p class="context">Vær kort, ærlig og uten unnskyldninger. Ikke overforklare.</p>
+      <div class="btn-row">
+        <button class="btn" onclick="toggleAnswer(this)">Vis svar</button>
+        <button class="btn btn-edit" onclick="toggleEdit(this)">Rediger</button>
+      </div>
+      <div class="answer-box" data-key="q3">Investorene trakk seg etter at teknologirisikoen ble tydeligere enn forventet. Det var ikke en operativ svikt — det var en forretningsmodell som ikke holdt. Jeg hadde gjort min vurdering, og den var ikke god nok. Det aksepterer jeg. Det jeg tok med meg videre er at man aldri skal undervurdere kapitalbehovet i en oppstartsfase, og at man må ha klare go/no-go-punkter tidlig. Erfaringen har gjort meg skarpere på risikovurderinger.</div>
+      <textarea class="edit-box" data-key="q3">Investorene trakk seg etter at teknologirisikoen ble tydeligere enn forventet. Det var ikke en operativ svikt — det var en forretningsmodell som ikke holdt. Jeg hadde gjort min vurdering, og den var ikke god nok. Det aksepterer jeg. Det jeg tok med meg videre er at man aldri skal undervurdere kapitalbehovet i en oppstartsfase, og at man må ha klare go/no-go-punkter tidlig. Erfaringen har gjort meg skarpere på risikovurderinger.</textarea>
+    </div>
+
+    <div class="card">
+      <span class="tag tag-info">Pendling</span>
+      <p class="q">«Du bor i Lillesand. Hvordan ser du for deg hverdagen logistisk?»</p>
+      <div class="btn-row">
+        <button class="btn" onclick="toggleAnswer(this)">Vis svar</button>
+        <button class="btn btn-edit" onclick="toggleEdit(this)">Rediger</button>
+      </div>
+      <div class="answer-box" data-key="q4">Jeg er åpen om det og har tenkt det grundig gjennom. Jeg har datter i Oslo, noe som gjør pendlingen meningsfull også privat. Jeg er fleksibel på botilpasning og har ikke behov for å reise hjem hver kveld. For en rolle som denne er tilstedeværelse avgjørende, og det er jeg innstilt på å levere.</div>
+      <textarea class="edit-box" data-key="q4">Jeg er åpen om det og har tenkt det grundig gjennom. Jeg har datter i Oslo, noe som gjør pendlingen meningsfull også privat. Jeg er fleksibel på botilpasning og har ikke behov for å reise hjem hver kveld. For en rolle som denne er tilstedeværelse avgjørende, og det er jeg innstilt på å levere.</textarea>
+    </div>
+
+    <h2>Ledelse og organisasjon</h2>
+
+    <div class="card">
+      <span class="tag tag-info">Fagforbundet</span>
+      <p class="q">«Fagforbundet var representert i første intervju. Hva er din filosofi rundt fagforeningsarbeid?»</p>
+      <div class="btn-row">
+        <button class="btn" onclick="toggleAnswer(this)">Vis svar</button>
+        <button class="btn btn-edit" onclick="toggleEdit(this)">Rediger</button>
+      </div>
+      <div class="answer-box" data-key="q5">Jeg oppfordret aktivt til organisering i LiBiR — ikke fordi jeg måtte, men fordi jeg mener tillitsvalgte er en ledelsesressurs når de brukes riktig. De ser ting ledelsen ikke ser. I vanskelige prosesser er det mye lettere å gjennomføre endringer når tillitsvalgte er med fra starten enn når de inviteres inn til slutt for å godkjenne noe som allerede er bestemt.</div>
+      <textarea class="edit-box" data-key="q5">Jeg oppfordret aktivt til organisering i LiBiR — ikke fordi jeg måtte, men fordi jeg mener tillitsvalgte er en ledelsesressurs når de brukes riktig. De ser ting ledelsen ikke ser. I vanskelige prosesser er det mye lettere å gjennomføre endringer når tillitsvalgte er med fra starten enn når de inviteres inn til slutt for å godkjenne noe som allerede er bestemt.</textarea>
+    </div>
+
+    <div class="card">
+      <span class="tag tag-info">ERP / endringsledelse</span>
+      <p class="q">«ERP-innføringen er planlagt til sommeren. Hva er din erfaring med digitale implementeringer i driftsorganisasjoner?»</p>
+      <p class="context">Karlsens eget svar på hva som er mest kritisk — bruk det!</p>
+      <div class="btn-row">
+        <button class="btn" onclick="toggleAnswer(this)">Vis svar</button>
+        <button class="btn btn-edit" onclick="toggleEdit(this)">Rediger</button>
+      </div>
+      <div class="answer-box" data-key="q6">Vi innførte digitale verktøy for ruteplanlegging og avviksregistrering i LiBiR, og den erfaringen lærte meg at den tekniske siden er den enkle biten. Det vanskelige er å sørge for at sjåfører og mellomledere faktisk eier løsningen — ikke bare bruker den fordi de må. Det krever opplæring i forkant, superbrukere i organisasjonen, og tålmodighet med dem som er sist ute. Jeg ville prioritert det fra dag én.</div>
+      <textarea class="edit-box" data-key="q6">Vi innførte digitale verktøy for ruteplanlegging og avviksregistrering i LiBiR, og den erfaringen lærte meg at den tekniske siden er den enkle biten. Det vanskelige er å sørge for at sjåfører og mellomledere faktisk eier løsningen — ikke bare bruker den fordi de må. Det krever opplæring i forkant, superbrukere i organisasjonen, og tålmodighet med dem som er sist ute. Jeg ville prioritert det fra dag én.</textarea>
+    </div>
+
+    <div class="card">
+      <span class="tag tag-info">Konflikthåndtering</span>
+      <p class="q">«Fortell om en situasjon der du måtte ta en upopulær beslutning overfor ansatte.»</p>
+      <div class="btn-row">
+        <button class="btn" onclick="toggleAnswer(this)">Vis svar</button>
+        <button class="btn btn-edit" onclick="toggleEdit(this)">Rediger</button>
+      </div>
+      <div class="answer-box" data-key="q7">I LiBiR måtte vi en gang endre turnusordningen for sjåfører — noe som direkte påvirket fritid og lønn for mange. Jeg tok det tidlig inn i partssamarbeidet, la kortene på bordet om hva som drev behovet, og ga tillitsvalgte reell påvirkningskraft på utformingen. Det gjorde ikke beslutningen populær, men det gjorde den akseptert. Folk tåler mye når de opplever at prosessen er rettferdig.</div>
+      <textarea class="edit-box" data-key="q7">I LiBiR måtte vi en gang endre turnusordningen for sjåfører — noe som direkte påvirket fritid og lønn for mange. Jeg tok det tidlig inn i partssamarbeidet, la kortene på bordet om hva som drev behovet, og ga tillitsvalgte reell påvirkningskraft på utformingen. Det gjorde ikke beslutningen populær, men det gjorde den akseptert. Folk tåler mye når de opplever at prosessen er rettferdig.</textarea>
+    </div>
+
+    <div class="card">
+      <span class="tag tag-info">HMS</span>
+      <p class="q">«Lystgass-patroner i restavfall er en kjent HMS-utfordring. Hva er din tilnærming til systemiske sikkerhetsrisikoer?»</p>
+      <div class="btn-row">
+        <button class="btn" onclick="toggleAnswer(this)">Vis svar</button>
+        <button class="btn btn-edit" onclick="toggleEdit(this)">Rediger</button>
+      </div>
+      <div class="answer-box" data-key="q8">Det er en utfordring som ikke løses kun internt — det krever informasjonskampanjer mot innbyggere, samarbeid med kommunen og klare prosedyrer for hva sjåfører skal gjøre ved funn. I LiBiR jobbet vi systematisk med HMS-kultur: avvik skal meldes, ikke skjules. En sjåfør som melder et avvik er en ressurs, ikke et problem. Den kulturen tar tid å bygge, men den er avgjørende for å fange risiko tidlig.</div>
+      <textarea class="edit-box" data-key="q8">Det er en utfordring som ikke løses kun internt — det krever informasjonskampanjer mot innbyggere, samarbeid med kommunen og klare prosedyrer for hva sjåfører skal gjøre ved funn. I LiBiR jobbet vi systematisk med HMS-kultur: avvik skal meldes, ikke skjules. En sjåfør som melder et avvik er en ressurs, ikke et problem. Den kulturen tar tid å bygge, men den er avgjørende for å fange risiko tidlig.</textarea>
+    </div>
+
+    <h2>Strategi og REG-kontekst</h2>
+
+    <div class="card">
+      <span class="tag tag-gray">Privatisering</span>
+      <p class="q">«Det er en løpende politisk debatt om privatisering av innsamlingen. Hva mener du?»</p>
+      <p class="context">Nøytral og profesjonell. Du er ikke politiker.</p>
+      <div class="btn-row">
+        <button class="btn" onclick="toggleAnswer(this)">Vis svar</button>
+        <button class="btn btn-edit" onclick="toggleEdit(this)">Rediger</button>
+      </div>
+      <div class="answer-box" data-key="q9">Det er et politisk spørsmål som politikerne skal avgjøre. Min rolle som avdelingsdirektør er å levere best mulig tjeneste innenfor den modellen som til enhver tid gjelder. Jeg har bakgrunn fra offentlig sektor, men jeg har også samarbeidet tett med private aktører. Uansett hvilken modell man velger, må fokuset være å levere så gode tjenester som overhodet mulig.</div>
+      <textarea class="edit-box" data-key="q9">Det er et politisk spørsmål som politikerne skal avgjøre. Min rolle som avdelingsdirektør er å levere best mulig tjeneste innenfor den modellen som til enhver tid gjelder. Jeg har bakgrunn fra offentlig sektor, men jeg har også samarbeidet tett med private aktører. Uansett hvilken modell man velger, må fokuset være å levere så gode tjenester som overhodet mulig.</textarea>
+    </div>
+
+    <div class="card">
+      <span class="tag tag-success">Dine spørsmål til dem</span>
+      <p class="q">«Har du spørsmål til oss?»</p>
+      <p class="context">Ha minst 2–3 gode spørsmål klare. Vis at du tenker fremover.</p>
+      <div class="btn-row">
+        <button class="btn" onclick="toggleAnswer(this)">Vis svar</button>
+        <button class="btn btn-edit" onclick="toggleEdit(this)">Rediger</button>
+      </div>
+      <div class="answer-box" data-key="q10">1. ERP-innføringen er planlagt til sommeren — hva er den største risikoen dere ser i det prosjektet akkurat nå?
+
+2. Hvordan vil dere beskrive kulturen i innsamlingsavdelingen i dag — hva er dere stolte av, og hva ønsker dere å utvikle videre?
+
+3. Hva ser dere for dere at den nye avdelingsdirektøren prioriterer i de første 90 dagene?</div>
+      <textarea class="edit-box" data-key="q10">1. ERP-innføringen er planlagt til sommeren — hva er den største risikoen dere ser i det prosjektet akkurat nå?
+
+2. Hvordan vil dere beskrive kulturen i innsamlingsavdelingen i dag — hva er dere stolte av, og hva ønsker dere å utvikle videre?
+
+3. Hva ser dere for dere at den nye avdelingsdirektøren prioriterer i de første 90 dagene?</textarea>
+    </div>
+
+    <h2>Ekstra spørsmål — ledelse og atferd</h2>
+
+    <div class="card">
+      <span class="tag tag-info">Lederfilosofi</span>
+      <p class="q">«Hvordan vil dine tidligere medarbeidere beskrive deg som leder?»</p>
+      <div class="btn-row">
+        <button class="btn" onclick="toggleAnswer(this)">Vis svar</button>
+        <button class="btn btn-edit" onclick="toggleEdit(this)">Rediger</button>
+      </div>
+      <div class="answer-box" data-key="q11">Jeg tror de ville sagt at jeg er tydelig på hva som forventes, men ikke rigid på hvordan det gjøres. At jeg er tilgjengelig uten å henge over skulderen. Og at jeg tar folk på alvor — også når de sier ting jeg ikke vil høre. Jeg har alltid vært opptatt av at folk skal tørre å melde fra, og jeg tror det gjenspeiles i kulturen vi bygget i LiBiR.</div>
+      <textarea class="edit-box" data-key="q11">Jeg tror de ville sagt at jeg er tydelig på hva som forventes, men ikke rigid på hvordan det gjøres. At jeg er tilgjengelig uten å henge over skulderen. Og at jeg tar folk på alvor — også når de sier ting jeg ikke vil høre. Jeg har alltid vært opptatt av at folk skal tørre å melde fra, og jeg tror det gjenspeiles i kulturen vi bygget i LiBiR.</textarea>
+    </div>
+
+    <div class="card">
+      <span class="tag tag-info">Motivasjon</span>
+      <p class="q">«Hva motiverer deg i arbeidshverdagen?»</p>
+      <div class="btn-row">
+        <button class="btn" onclick="toggleAnswer(this)">Vis svar</button>
+        <button class="btn btn-edit" onclick="toggleEdit(this)">Rediger</button>
+      </div>
+      <div class="answer-box" data-key="q12">Det operative. Å se at ting faktisk fungerer — at biler går ut, at folk vet hva de skal gjøre, at innbyggerne får tjenesten de forventer. Jeg har alltid hatt mer energi av å stå midt i en driftsorganisasjon enn å sitte i møter. Den motivasjonen har holdt seg i 20 år, og jeg tror det er et godt tegn.</div>
+      <textarea class="edit-box" data-key="q12">Det operative. Å se at ting faktisk fungerer — at biler går ut, at folk vet hva de skal gjøre, at innbyggerne får tjenesten de forventer. Jeg har alltid hatt mer energi av å stå midt i en driftsorganisasjon enn å sitte i møter. Den motivasjonen har holdt seg i 20 år, og jeg tror det er et godt tegn.</textarea>
+    </div>
+
+    <div class="card">
+      <span class="tag tag-info">Svakhet</span>
+      <p class="q">«Hva er din største svakhet som leder?»</p>
+      <p class="context">Vær ærlig. Ikke kom med en styrke forkledd som svakhet.</p>
+      <div class="btn-row">
+        <button class="btn" onclick="toggleAnswer(this)">Vis svar</button>
+        <button class="btn btn-edit" onclick="toggleEdit(this)">Rediger</button>
+      </div>
+      <div class="answer-box" data-key="q13">Jeg kan av og til bli for tålmodig med folk som ikke leverer — jeg gir gjerne en sjanse for mye før jeg setter foten ned. Det er fordi jeg genuint ønsker at folk skal lykkes, men det kan gå ut over resten av teamet. Det er noe jeg har blitt mer bevisst på med årene, og jeg er blitt flinkere til å ta de vanskelige samtalene tidligere.</div>
+      <textarea class="edit-box" data-key="q13">Jeg kan av og til bli for tålmodig med folk som ikke leverer — jeg gir gjerne en sjanse for mye før jeg setter foten ned. Det er fordi jeg genuint ønsker at folk skal lykkes, men det kan gå ut over resten av teamet. Det er noe jeg har blitt mer bevisst på med årene, og jeg er blitt flinkere til å ta de vanskelige samtalene tidligere.</textarea>
+    </div>
+
+    <div class="card">
+      <span class="tag tag-info">Første 100 dager</span>
+      <p class="q">«Hva ville du prioritert de første 100 dagene i stillingen?»</p>
+      <div class="btn-row">
+        <button class="btn" onclick="toggleAnswer(this)">Vis svar</button>
+        <button class="btn btn-edit" onclick="toggleEdit(this)">Rediger</button>
+      </div>
+      <div class="answer-box" data-key="q14">De første ukene ville jeg brukt på å lytte — til mellomlederne, til tillitsvalgte, til sjåfører. Jeg ville ikke kommet inn med en ferdig agenda. Jeg vet mye om bransjen, men jeg vet ikke nok om denne organisasjonen ennå. Parallelt ville jeg satt meg grundig inn i ERP-prosjektet, fordi det ikke venter på meg. Og jeg ville markert tidlig at avvik skal meldes — ikke skjules.</div>
+      <textarea class="edit-box" data-key="q14">De første ukene ville jeg brukt på å lytte — til mellomlederne, til tillitsvalgte, til sjåfører. Jeg ville ikke kommet inn med en ferdig agenda. Jeg vet mye om bransjen, men jeg vet ikke nok om denne organisasjonen ennå. Parallelt ville jeg satt meg grundig inn i ERP-prosjektet, fordi det ikke venter på meg. Og jeg ville markert tidlig at avvik skal meldes — ikke skjules.</textarea>
+    </div>
+
+    <div class="card">
+      <span class="tag tag-info">Sykefravær</span>
+      <p class="q">«Innsamlingsavdelinger har gjerne høyt sykefravær. Hva er din tilnærming?»</p>
+      <div class="btn-row">
+        <button class="btn" onclick="toggleAnswer(this)">Vis svar</button>
+        <button class="btn btn-edit" onclick="toggleEdit(this)">Rediger</button>
+      </div>
+      <div class="answer-box" data-key="q15">Sykefravær er sjelden ett problem — det er et symptom på flere. Noen ganger handler det om fysisk belastning, noen ganger om kultur eller ledelse, noen ganger om enkeltpersoner i vanskelige livssituasjoner. Jeg ville først forstå hva som driver fraværet i denne avdelingen konkret, før jeg satte inn tiltak. Det jeg vet virker generelt er tett oppfølging, tidlig dialog, og at folk opplever seg sett — ikke bare registrert.</div>
+      <textarea class="edit-box" data-key="q15">Sykefravær er sjelden ett problem — det er et symptom på flere. Noen ganger handler det om fysisk belastning, noen ganger om kultur eller ledelse, noen ganger om enkeltpersoner i vanskelige livssituasjoner. Jeg ville først forstå hva som driver fraværet i denne avdelingen konkret, før jeg satte inn tiltak. Det jeg vet virker generelt er tett oppfølging, tidlig dialog, og at folk opplever seg sett — ikke bare registrert.</textarea>
+    </div>
+
+    <div class="card">
+      <span class="tag tag-info">Økonomi</span>
+      <p class="q">«Hva er din erfaring med budsjettansvar og økonomistyring?»</p>
+      <div class="btn-row">
+        <button class="btn" onclick="toggleAnswer(this)">Vis svar</button>
+        <button class="btn btn-edit" onclick="toggleEdit(this)">Rediger</button>
+      </div>
+      <div class="answer-box" data-key="q16">Jeg har hatt fullt budsjettansvar som daglig leder i LiBiR i 16 år — driftsbudsjett, investeringsbudsjett og rapportering til styret. Vi opererte i et marked med trange marginer, og jeg lærte tidlig at god økonomiforståelse er en forutsetning for å ta gode operative beslutninger. Jeg er komfortabel med tall og bruker dem aktivt i styringen, ikke bare i ettertid.</div>
+      <textarea class="edit-box" data-key="q16">Jeg har hatt fullt budsjettansvar som daglig leder i LiBiR i 16 år — driftsbudsjett, investeringsbudsjett og rapportering til styret. Vi opererte i et marked med trange marginer, og jeg lærte tidlig at god økonomiforståelse er en forutsetning for å ta gode operative beslutninger. Jeg er komfortabel med tall og bruker dem aktivt i styringen, ikke bare i ettertid.</textarea>
+    </div>
+
+    <div class="card">
+      <span class="tag tag-info">Kjøretøy</span>
+      <p class="q">«Kjøretøyanskaffelse er en kritisk og langsiktig prosess. Hva er din erfaring?»</p>
+      <div class="btn-row">
+        <button class="btn" onclick="toggleAnswer(this)">Vis svar</button>
+        <button class="btn btn-edit" onclick="toggleEdit(this)">Rediger</button>
+      </div>
+      <div class="answer-box" data-key="q17">I LiBiR hadde vi ansvar for kjøretøyflåten og anskaffelsesprosessene. Jeg kjenner godt til de lange leveringstidene i bransjen og viktigheten av å planlegge tidlig — spesielt nå med overgangen til elektriske og biogass-kjøretøy der leverandørmarkedet er mer begrenset. Det handler om å ha en rullerende plan, ikke bare reagere når biler faller ut.</div>
+      <textarea class="edit-box" data-key="q17">I LiBiR hadde vi ansvar for kjøretøyflåten og anskaffelsesprosessene. Jeg kjenner godt til de lange leveringstidene i bransjen og viktigheten av å planlegge tidlig — spesielt nå med overgangen til elektriske og biogass-kjøretøy der leverandørmarkedet er mer begrenset. Det handler om å ha en rullerende plan, ikke bare reagere når biler faller ut.</textarea>
+    </div>
+
+    <div class="card">
+      <span class="tag tag-warn">Press-spørsmål</span>
+      <p class="q">«Du har ikke ledet i Oslo kommune før. Hva vet du om å navigere i et stort byråkrati?»</p>
+      <p class="context">Direkte utfordring — ikke bli defensiv.</p>
+      <div class="btn-row">
+        <button class="btn" onclick="toggleAnswer(this)">Vis svar</button>
+        <button class="btn btn-edit" onclick="toggleEdit(this)">Rediger</button>
+      </div>
+      <div class="answer-box" data-key="q18">Det er riktig at jeg kommer fra et IKS, ikke fra en kommunal etat. Men LiBiR var eid av kommuner og opererte i tett samspill med politiske styringsstrukturer, bestillere og kommunale krav. Jeg kjenner logikken i offentlig forvaltning — det er ikke fremmed terreng. Og det jeg ikke kan fra dag én, det lærer jeg. Det har jeg alltid gjort.</div>
+      <textarea class="edit-box" data-key="q18">Det er riktig at jeg kommer fra et IKS, ikke fra en kommunal etat. Men LiBiR var eid av kommuner og opererte i tett samspill med politiske styringsstrukturer, bestillere og kommunale krav. Jeg kjenner logikken i offentlig forvaltning — det er ikke fremmed terreng. Og det jeg ikke kan fra dag én, det lærer jeg. Det har jeg alltid gjort.</textarea>
+    </div>
+
+    <div class="card">
+      <span class="tag tag-warn">Press-spørsmål</span>
+      <p class="q">«Hvorfor har du ikke søkt en lignende stilling tidligere?»</p>
+      <div class="btn-row">
+        <button class="btn" onclick="toggleAnswer(this)">Vis svar</button>
+        <button class="btn btn-edit" onclick="toggleEdit(this)">Rediger</button>
+      </div>
+      <div class="answer-box" data-key="q19">Fordi jeg i 16 år bygget noe jeg var genuint stolt av i LiBiR. Jeg søkte ikke bort fordi jeg hadde det dårlig — jeg søkte fordi kapittelet der var ferdig. Agder Miljø var et sidespor som ikke gikk som planlagt. Nå er jeg klar for neste steg, og denne stillingen er den rette kombinasjonen av skala, faglig relevans og samfunnsoppdrag.</div>
+      <textarea class="edit-box" data-key="q19">Fordi jeg i 16 år bygget noe jeg var genuint stolt av i LiBiR. Jeg søkte ikke bort fordi jeg hadde det dårlig — jeg søkte fordi kapittelet der var ferdig. Agder Miljø var et sidespor som ikke gikk som planlagt. Nå er jeg klar for neste steg, og denne stillingen er den rette kombinasjonen av skala, faglig relevans og samfunnsoppdrag.</textarea>
+    </div>
+
+    <div class="card">
+      <span class="tag tag-info">Klima</span>
+      <p class="q">«Oslo har svært ambisiøse klimamål. Hvordan ser du innsamlingsavdelingens rolle?»</p>
+      <div class="btn-row">
+        <button class="btn" onclick="toggleAnswer(this)">Vis svar</button>
+        <button class="btn btn-edit" onclick="toggleEdit(this)">Rediger</button>
+      </div>
+      <div class="answer-box" data-key="q20">Innsamlingsavdelingen er ikke et klimatiltak i seg selv — men den er forutsetningen for at klimatiltakene skal fungere. Riktig sortering, høy oppslutning blant innbyggerne og effektiv logistikk er det som bestemmer om materialgjenvinningsgraden faktisk øker fra 40% mot 65%. Der bidrar avdelingen — ikke gjennom store symbolhandlinger, men gjennom god drift hver eneste dag.</div>
+      <textarea class="edit-box" data-key="q20">Innsamlingsavdelingen er ikke et klimatiltak i seg selv — men den er forutsetningen for at klimatiltakene skal fungere. Riktig sortering, høy oppslutning blant innbyggerne og effektiv logistikk er det som bestemmer om materialgjenvinningsgraden faktisk øker fra 40% mot 65%. Der bidrar avdelingen — ikke gjennom store symbolhandlinger, men gjennom god drift hver eneste dag.</textarea>
+    </div>
+
+    <div class="card">
+      <span class="tag tag-info">Tverrfaglig samarbeid</span>
+      <p class="q">«Avdelingsdirektøren må samarbeide tett med andre avdelinger i REG. Hvordan er du i tverrfaglig samarbeid?»</p>
+      <div class="btn-row">
+        <button class="btn" onclick="toggleAnswer(this)">Vis svar</button>
+        <button class="btn btn-edit" onclick="toggleEdit(this)">Rediger</button>
+      </div>
+      <div class="answer-box" data-key="q21">Jeg trives godt i grensesnittet mellom fagområder. I LiBiR måtte jeg samarbeide med kommunale planleggere, innkjøpsmiljøer, HMS-rådgivere og politisk ledelse — ofte om de samme sakene. Tverrfaglig samarbeid fungerer best når alle parter er tydelige på hva de eier og hva de trenger fra hverandre. Jeg er ikke redd for å si hva jeg mener, men jeg lytter også når andre vet bedre.</div>
+      <textarea class="edit-box" data-key="q21">Jeg trives godt i grensesnittet mellom fagområder. I LiBiR måtte jeg samarbeide med kommunale planleggere, innkjøpsmiljøer, HMS-rådgivere og politisk ledelse — ofte om de samme sakene. Tverrfaglig samarbeid fungerer best når alle parter er tydelige på hva de eier og hva de trenger fra hverandre. Jeg er ikke redd for å si hva jeg mener, men jeg lytter også når andre vet bedre.</textarea>
+    </div>
+
+    <div class="card">
+      <span class="tag tag-info">Mappost</span>
+      <p class="q">«Mappost er under implementering for ruteoptimalisering. Hva tenker du om slike verktøy?»</p>
+      <div class="btn-row">
+        <button class="btn" onclick="toggleAnswer(this)">Vis svar</button>
+        <button class="btn btn-edit" onclick="toggleEdit(this)">Rediger</button>
+      </div>
+      <div class="answer-box" data-key="q22">Ruteoptimalisering er et av de tiltakene som faktisk gir målbar effekt — på kostnader, utslipp og arbeidsmiljø. Vi jobbet med lignende verktøy i LiBiR. Det kritiske er at optimaliseringen tar hensyn til det sjåførene vet — slike systemer kan fort undervurdere praktiske forhold som adkomst, sesongvariasjoner og lokalkunnskap. Jeg ville sørget for at innspill fra gulvet er del av optimaliseringen.</div>
+      <textarea class="edit-box" data-key="q22">Ruteoptimalisering er et av de tiltakene som faktisk gir målbar effekt — på kostnader, utslipp og arbeidsmiljø. Vi jobbet med lignende verktøy i LiBiR. Det kritiske er at optimaliseringen tar hensyn til det sjåførene vet — slike systemer kan fort undervurdere praktiske forhold som adkomst, sesongvariasjoner og lokalkunnskap. Jeg ville sørget for at innspill fra gulvet er del av optimaliseringen.</textarea>
+    </div>
+
+    <div class="card">
+      <span class="tag tag-warn">Press-spørsmål</span>
+      <p class="q">«Hvis du ikke får denne jobben — hva gjør du da?»</p>
+      <p class="context">Rolig og ærlig. Ikke virk desperat, men heller ikke likegyldig.</p>
+      <div class="btn-row">
+        <button class="btn" onclick="toggleAnswer(this)">Vis svar</button>
+        <button class="btn btn-edit" onclick="toggleEdit(this)">Rediger</button>
+      </div>
+      <div class="answer-box" data-key="q23">Da fortsetter jeg å lete etter den rette rollen. Jeg er tålmodig — jeg vil ikke ta hva som helst bare for å ha noe. Men jeg vil si det ærlig: denne stillingen er den jeg har ønsket meg mest av de jeg har sett på. Det er kombinasjonen av skala, bransje og samfunnsoppdrag som gjør den unik for meg akkurat nå.</div>
+      <textarea class="edit-box" data-key="q23">Da fortsetter jeg å lete etter den rette rollen. Jeg er tålmodig — jeg vil ikke ta hva som helst bare for å ha noe. Men jeg vil si det ærlig: denne stillingen er den jeg har ønsket meg mest av de jeg har sett på. Det er kombinasjonen av skala, bransje og samfunnsoppdrag som gjør den unik for meg akkurat nå.</textarea>
+    </div>
+
+    <div class="card">
+      <span class="tag tag-success">Avslutning</span>
+      <p class="q">«Er det noe du vil legge til som du ikke har fått sagt?»</p>
+      <p class="context">Bruk dette — det er en gave. Ikke la den gå til spille.</p>
+      <div class="btn-row">
+        <button class="btn" onclick="toggleAnswer(this)">Vis svar</button>
+        <button class="btn btn-edit" onclick="toggleEdit(this)">Rediger</button>
+      </div>
+      <div class="answer-box" data-key="q24">Ja — jeg vil bare si at jeg har stor respekt for det REG leverer, og for kompleksiteten i den oppgaven. 350 000 husholdninger, 100 kjøretøy, og krav som bare øker. Det er ikke en jobb for noen som vil ha det enkelt. Jeg er her fordi jeg synes det er meningsfylt, og fordi jeg tror jeg kan bidra til det neste kapittelet. Takk for et godt intervju.</div>
+      <textarea class="edit-box" data-key="q24">Ja — jeg vil bare si at jeg har stor respekt for det REG leverer, og for kompleksiteten i den oppgaven. 350 000 husholdninger, 100 kjøretøy, og krav som bare øker. Det er ikke en jobb for noen som vil ha det enkelt. Jeg er her fordi jeg synes det er meningsfylt, og fordi jeg tror jeg kan bidra til det neste kapittelet. Takk for et godt intervju.</textarea>
+    </div>
+
+    <div class="card">
+      <span class="tag tag-info">Visjon</span>
+      <p class="q">«Hvor ser du innsamlingsavdelingen om fem år?»</p>
+      <div class="btn-row">
+        <button class="btn" onclick="toggleAnswer(this)">Vis svar</button>
+        <button class="btn btn-edit" onclick="toggleEdit(this)">Rediger</button>
+      </div>
+      <div class="answer-box" data-key="q25">En avdeling som har tatt ERP-innføringen og gjort den til en fordel, ikke en byrde. Som har fornyet deler av kjøretøyflåten mot lav- og nullutslipp. Som har en HMS-kultur der avvik faktisk meldes og brukes til å bli bedre. Og som leverer innsamlingstjenester som Oslos innbyggere opplever som pålitelige og usynlige — det beste komplimentet en innsamlingsavdeling kan få.</div>
+      <textarea class="edit-box" data-key="q25">En avdeling som har tatt ERP-innføringen og gjort den til en fordel, ikke en byrde. Som har fornyet deler av kjøretøyflåten mot lav- og nullutslipp. Som har en HMS-kultur der avvik faktisk meldes og brukes til å bli bedre. Og som leverer innsamlingstjenester som Oslos innbyggere opplever som pålitelige og usynlige — det beste komplimentet en innsamlingsavdeling kan få.</textarea>
+    </div>
+
+  </div>
+
+  <!-- MAP -->
+  <div id="map" class="section">
+    <p class="intro-text">20 minutter er satt av til MAP-gjennomgang. De vil stille åpne spørsmål med utgangspunkt i rapporten. Selvinnsikt og ærlighet slår alltid et «perfekt» svar.</p>
+
+    <div class="card">
+      <span class="tag tag-success">Klar styrke</span>
+      <h3>Emosjonell balanse — svært høy</h3>
+      <p class="context">Rolig, stabil, stressrobust. Ideelt for driftsleder med 200 folk.</p>
+      <div class="btn-row">
+        <button class="btn" onclick="toggleAnswer(this)">Vis snakkepunkter</button>
+        <button class="btn btn-edit" onclick="toggleEdit(this)">Rediger</button>
+      </div>
+      <div class="answer-box" data-key="m1">«Jeg er ikke uberørt av krevende situasjoner — jeg reagerer, men jeg gjør det internt mens jeg handler utad. I en driftsorganisasjon følger folk lederens signaler svært tett. Hvis lederen mister roen, gjør alle andre det også.»
+
+Mulig oppfølging: «Kan det bli en svakhet?»
+→ «Det kan bli det hvis man er for rolig i situasjoner der teamet trenger å forstå alvoret. Det er noe jeg er bevisst på.»</div>
+      <textarea class="edit-box" data-key="m1">«Jeg er ikke uberørt av krevende situasjoner — jeg reagerer, men jeg gjør det internt mens jeg handler utad. I en driftsorganisasjon følger folk lederens signaler svært tett. Hvis lederen mister roen, gjør alle andre det også.»
+
+Mulig oppfølging: «Kan det bli en svakhet?»
+→ «Det kan bli det hvis man er for rolig i situasjoner der teamet trenger å forstå alvoret. Det er noe jeg er bevisst på.»</textarea>
+    </div>
+
+    <div class="card">
+      <span class="tag tag-success">Klar styrke</span>
+      <h3>Målbevissthet — høy</h3>
+      <p class="context">Fokusert, iherdig, analytisk. Sterk lederprofil.</p>
+      <div class="btn-row">
+        <button class="btn" onclick="toggleAnswer(this)">Vis snakkepunkter</button>
+        <button class="btn btn-edit" onclick="toggleEdit(this)">Rediger</button>
+      </div>
+      <div class="answer-box" data-key="m2">«Jeg liker å ha klare mål og jobbe systematisk mot dem. I RenoNorden-situasjonen i 2017 var det nettopp den egenskapen som fikk oss gjennom — jeg holdt fokus på løsningen, ikke på kaoset rundt.»</div>
+      <textarea class="edit-box" data-key="m2">«Jeg liker å ha klare mål og jobbe systematisk mot dem. I RenoNorden-situasjonen i 2017 var det nettopp den egenskapen som fikk oss gjennom — jeg holdt fokus på løsningen, ikke på kaoset rundt.»</textarea>
+    </div>
+
+    <div class="card">
+      <span class="tag tag-warn">Vær bevisst</span>
+      <h3>Selvtillit — litt under midten</h3>
+      <p class="context">Den eneste skalaen som kan gi dem en bekymring. Eie den med selvinnsikt.</p>
+      <div class="btn-row">
+        <button class="btn" onclick="toggleAnswer(this)">Vis snakkepunkter</button>
+        <button class="btn btn-edit" onclick="toggleEdit(this)">Rediger</button>
+      </div>
+      <div class="answer-box" data-key="m3">«Det kjenner jeg meg igjen i. Jeg er ikke den som slår meg på brystet. Men jeg skiller mellom selvtillit og faglig trygghet — jeg er svært trygg på faget og på de vurderingene jeg tar. Det jeg er forsiktig med er å trekke for raske konklusjoner i ukjente situasjoner. Jeg ser det faktisk som en styrke i en rolle som krever grundighet.»</div>
+      <textarea class="edit-box" data-key="m3">«Det kjenner jeg meg igjen i. Jeg er ikke den som slår meg på brystet. Men jeg skiller mellom selvtillit og faglig trygghet — jeg er svært trygg på faget og på de vurderingene jeg tar. Det jeg er forsiktig med er å trekke for raske konklusjoner i ukjente situasjoner. Jeg ser det faktisk som en styrke i en rolle som krever grundighet.»</textarea>
+    </div>
+
+    <div class="card">
+      <span class="tag tag-info">Kombiner bevisst</span>
+      <h3>Sosial stil — saklig + støttende</h3>
+      <p class="context">Rapporten viser begge sider. Bruk kombinasjonen aktivt.</p>
+      <div class="btn-row">
+        <button class="btn" onclick="toggleAnswer(this)">Vis snakkepunkter</button>
+        <button class="btn btn-edit" onclick="toggleEdit(this)">Rediger</button>
+      </div>
+      <div class="answer-box" data-key="m4">«Jeg trenger ikke stå i sentrum for å trives. Jeg har alltid foretrukket å bygge folk rundt meg fremfor å gjøre alt selv. Den kombinasjonen — direkte og saklig på sak, men genuint støttende på person — har fungert godt i operative miljøer.»</div>
+      <textarea class="edit-box" data-key="m4">«Jeg trenger ikke stå i sentrum for å trives. Jeg har alltid foretrukket å bygge folk rundt meg fremfor å gjøre alt selv. Den kombinasjonen — direkte og saklig på sak, men genuint støttende på person — har fungert godt i operative miljøer.»</textarea>
+    </div>
+  </div>
+
+  <!-- CASE -->
+  <div id="case" class="section">
+    <p class="intro-text">30 min på stedet + 15 min presentasjon + 10 min diskusjon. Du vet ikke hva caset handler om — men du kan ha en fast struktur klar.</p>
+
+    <div class="card">
+      <h3>Din 5-stegs struktur</h3>
+      <div class="answer-box visible" data-key="c1">1. Forstå problemet (5 min)
+Les nøye. Hva er egentlig situasjonen? Hva er symptom og hva er årsak? Skriv ned problemformuleringen med egne ord.
+
+2. Kartlegg interessenter (5 min)
+Hvem påvirkes? Hvem må involveres? Ansatte, tillitsvalgte, innbyggere, politikere, andre etater?
+
+3. Alternativer (8 min)
+Lag 2–3 mulige veier fremover. Vis at du ser flere muligheter.
+
+4. Anbefaling (7 min)
+Hva ville du gjort, og hvorfor? Vær tydelig. De vil se at du kan beslutte, ikke bare analysere.
+
+5. Risiko og oppfølging (5 min)
+Hva kan gå galt? Hvem må du ha med deg? Hva er første konkrete steg?</div>
+      <textarea class="edit-box" data-key="c1">1. Forstå problemet (5 min)
+Les nøye. Hva er egentlig situasjonen? Hva er symptom og hva er årsak? Skriv ned problemformuleringen med egne ord.
+
+2. Kartlegg interessenter (5 min)
+Hvem påvirkes? Hvem må involveres? Ansatte, tillitsvalgte, innbyggere, politikere, andre etater?
+
+3. Alternativer (8 min)
+Lag 2–3 mulige veier fremover. Vis at du ser flere muligheter.
+
+4. Anbefaling (7 min)
+Hva ville du gjort, og hvorfor? Vær tydelig. De vil se at du kan beslutte, ikke bare analysere.
+
+5. Risiko og oppfølging (5 min)
+Hva kan gå galt? Hvem må du ha med deg? Hva er første konkrete steg?</textarea>
+      <div class="btn-row"><button class="btn btn-edit" onclick="toggleEditStatic(this)">Rediger</button></div>
+    </div>
+
+    <div class="card">
+      <h3>Typiske scenarier for denne rollen</h3>
+      <div class="answer-box visible" data-key="c2">ERP-innføring til sommeren — mest sannsynlig gitt Karlsens signal. Tenk: hva ville du gjøre de første 60 dagene?
+
+Driftskrise: 20–30% av kjøretøyene ute av drift samtidig. Hva prioriterer du, hvem varsler du, og hvordan kommuniserer du utad?
+
+Organisasjonsutfordring: konflikt mellom faggrupper, høyt sykefravær, eller motstand mot en endring.
+
+Kjøretøyanskaffelse med lang leveringstid — budsjett, prioritering, midlertidige løsninger.</div>
+      <textarea class="edit-box" data-key="c2">ERP-innføring til sommeren — mest sannsynlig gitt Karlsens signal. Tenk: hva ville du gjøre de første 60 dagene?
+
+Driftskrise: 20–30% av kjøretøyene ute av drift samtidig. Hva prioriterer du, hvem varsler du, og hvordan kommuniserer du utad?
+
+Organisasjonsutfordring: konflikt mellom faggrupper, høyt sykefravær, eller motstand mot en endring.
+
+Kjøretøyanskaffelse med lang leveringstid — budsjett, prioritering, midlertidige løsninger.</textarea>
+      <div class="btn-row"><button class="btn btn-edit" onclick="toggleEditStatic(this)">Rediger</button></div>
+    </div>
+
+    <div class="card">
+      <h3>Presentasjonstips (15 min)</h3>
+      <div class="answer-box visible" data-key="c3">1. Start med å ramme inn problemet slik du forstår det — vis at du leste nøye.
+
+2. Presenter alternativene kort — vis at du så flere veier.
+
+3. Vær tydelig på hva du anbefaler og hvorfor — ikke vær redd for å konkludere.
+
+4. Avslutt med konkret første steg — viser handlekraft.</div>
+      <textarea class="edit-box" data-key="c3">1. Start med å ramme inn problemet slik du forstår det — vis at du leste nøye.
+
+2. Presenter alternativene kort — vis at du så flere veier.
+
+3. Vær tydelig på hva du anbefaler og hvorfor — ikke vær redd for å konkludere.
+
+4. Avslutt med konkret første steg — viser handlekraft.</textarea>
+      <div class="btn-row"><button class="btn btn-edit" onclick="toggleEditStatic(this)">Rediger</button></div>
+    </div>
+
+    <div class="card">
+      <h3>Når de utfordrer løsningen din (10 min)</h3>
+      <div class="answer-box visible" data-key="c4">Hvis de sier du har oversett noe:
+«Det er et godt poeng — jeg ville justert ved å...»
+
+Hvis de spør om du er sikker:
+«Jeg er trygg på retningen, men åpen for at det finnes informasjon jeg ikke har sett ennå.»
+
+Ikke forsvare deg. Vis at du kan tenke mens du snakker.</div>
+      <textarea class="edit-box" data-key="c4">Hvis de sier du har oversett noe:
+«Det er et godt poeng — jeg ville justert ved å...»
+
+Hvis de spør om du er sikker:
+«Jeg er trygg på retningen, men åpen for at det finnes informasjon jeg ikke har sett ennå.»
+
+Ikke forsvare deg. Vis at du kan tenke mens du snakker.</textarea>
+      <div class="btn-row"><button class="btn btn-edit" onclick="toggleEditStatic(this)">Rediger</button></div>
+    </div>
+  </div>
+
+  <!-- FAKTA -->
+  <div id="fakta" class="section">
+
+    <div class="card">
+      <h3>Tall og struktur</h3>
+      <div class="answer-box visible" data-key="f1">Totalt ansatte REG: ~730
+Innsamlingsavdelingen: ~200 ansatte, ~100 kjøretøy
+Beholdere: 115 000 per uke
+Husholdninger: 350 000
+Etatsdirektør: Hans Petter Karlsen
+Rekrutterer: Erik Røhn (HR)</div>
+      <textarea class="edit-box" data-key="f1">Totalt ansatte REG: ~730
+Innsamlingsavdelingen: ~200 ansatte, ~100 kjøretøy
+Beholdere: 115 000 per uke
+Husholdninger: 350 000
+Etatsdirektør: Hans Petter Karlsen
+Rekrutterer: Erik Røhn (HR)</textarea>
+      <div class="btn-row"><button class="btn btn-edit" onclick="toggleEditStatic(this)">Rediger</button></div>
+    </div>
+
+    <div class="card">
+      <h3>Pågående prosjekter og utfordringer</h3>
+      <div class="answer-box visible" data-key="f2">ERP-innføring planlagt til sommeren (Karlsens topp-prioritet)
+Kjøretøyanskaffelse med lang leveringstid
+Mappost for ruteoptimalisering — implementering pågår
+Lystgass-patroner i avfall — HMS-utfordring
+Privatiseringsdebatten om innsamlingen
+Oslo klimamål: 95% reduksjon innen 2030
+Materialgjenvinningsgrad: mål 65%, i dag ~40%</div>
+      <textarea class="edit-box" data-key="f2">ERP-innføring planlagt til sommeren (Karlsens topp-prioritet)
+Kjøretøyanskaffelse med lang leveringstid
+Mappost for ruteoptimalisering — implementering pågår
+Lystgass-patroner i avfall — HMS-utfordring
+Privatiseringsdebatten om innsamlingen
+Oslo klimamål: 95% reduksjon innen 2030
+Materialgjenvinningsgrad: mål 65%, i dag ~40%</textarea>
+      <div class="btn-row"><button class="btn btn-edit" onclick="toggleEditStatic(this)">Rediger</button></div>
+    </div>
+
+    <div class="card">
+      <h3>Panelet i første intervju</h3>
+      <div class="answer-box visible" data-key="f3">Erik Røhn — HR/rekrutterer
+Hans Petter Karlsen — etatsdirektør (uventet tilstede — positivt signal)
+En fra kontraktsforvaltning
+En driftsleder
+En fra Fagforbundet
+En fra Samfunnsviterne</div>
+      <textarea class="edit-box" data-key="f3">Erik Røhn — HR/rekrutterer
+Hans Petter Karlsen — etatsdirektør (uventet tilstede — positivt signal)
+En fra kontraktsforvaltning
+En driftsleder
+En fra Fagforbundet
+En fra Samfunnsviterne</textarea>
+      <div class="btn-row"><button class="btn btn-edit" onclick="toggleEditStatic(this)">Rediger</button></div>
+    </div>
+
+    <div class="card">
+      <h3>Dine tre signalsetninger</h3>
+      <div class="answer-box visible" data-key="f4">1. «20 år i operativ avfallsdrift — og aldri mistet kontakten med det operative.»
+
+2. «Jeg søker ikke denne stillingen for å snu alt — jeg søker den for å bidra til det neste kapittelet.»
+
+3. «Uansett hvilken modell man velger, må fokuset være å levere så gode tjenester som overhodet mulig.»</div>
+      <textarea class="edit-box" data-key="f4">1. «20 år i operativ avfallsdrift — og aldri mistet kontakten med det operative.»
+
+2. «Jeg søker ikke denne stillingen for å snu alt — jeg søker den for å bidra til det neste kapittelet.»
+
+3. «Uansett hvilken modell man velger, må fokuset være å levere så gode tjenester som overhodet mulig.»</textarea>
+      <div class="btn-row"><button class="btn btn-edit" onclick="toggleEditStatic(this)">Rediger</button></div>
+    </div>
+
+    <div class="card">
+      <h3>Lønn — hvis det kommer opp</h3>
+      <div class="answer-box visible" data-key="f5">Kategori A toppleder Oslo kommune:
+1 087 600 – 1 226 300 kr (per 1. oktober 2025)
+
+Ditt ankerpunkt: A2–A4, dvs. 1 160 000–1 226 000
+Argument: 20 års erfaring, direkte bransjetreff, umiddelbar tilgjengelighet
+
+Tariffoppgjøret 2026 starter 14. april — kan gi ~3–4% økning fra mai.</div>
+      <textarea class="edit-box" data-key="f5">Kategori A toppleder Oslo kommune:
+1 087 600 – 1 226 300 kr (per 1. oktober 2025)
+
+Ditt ankerpunkt: A2–A4, dvs. 1 160 000–1 226 000
+Argument: 20 års erfaring, direkte bransjetreff, umiddelbar tilgjengelighet
+
+Tariffoppgjøret 2026 starter 14. april — kan gi ~3–4% økning fra mai.</textarea>
+      <div class="btn-row"><button class="btn btn-edit" onclick="toggleEditStatic(this)">Rediger</button></div>
+    </div>
+
+    <div class="card">
+      <h3>Parallellen til Veireno (2017)</h3>
+      <div class="answer-box visible" data-key="f6">Veireno gikk konkurs i 2017 — Oslo sto uten renovasjonstjeneste over natten. REG overtok selv. Parallell til RenoNorden som rammet LiBiR rundt samme tid. Du kan bruke din erfaring fra den situasjonen direkte.</div>
+      <textarea class="edit-box" data-key="f6">Veireno gikk konkurs i 2017 — Oslo sto uten renovasjonstjeneste over natten. REG overtok selv. Parallell til RenoNorden som rammet LiBiR rundt samme tid. Du kan bruke din erfaring fra den situasjonen direkte.</textarea>
+      <div class="btn-row"><button class="btn btn-edit" onclick="toggleEditStatic(this)">Rediger</button></div>
+    </div>
+  </div>
+
+  <!-- SJEKKLISTE -->
+  <div id="sjekkliste" class="section">
+
+    <div class="card">
+      <h3>Praktisk sjekkliste</h3>
+      <div id="checks"></div>
+      <div class="btn-row" style="margin-top:12px;">
+        <button class="btn btn-edit" onclick="toggleSjekkliste(this)">Rediger sjekkliste</button>
+      </div>
+      <textarea class="edit-box" id="sjekkliste-edit" style="margin-top:10px;"></textarea>
+    </div>
+
+    <div class="card">
+      <h3>Mental forberedelse</h3>
+      <div class="answer-box visible" data-key="s1">Du er ikke der for å overbevise skeptikere. Du er der for å bekrefte et inntrykk de allerede har.
+
+De valgte deg til andre runde av 41 søkere. De vil at du skal lykkes.
+
+Vær deg selv. Varm, jordnær, faglig trygg.
+
+Ikke overforbered deg til det punktet at du høres innøvd ut. Struktur ja — manus nei.</div>
+      <textarea class="edit-box" data-key="s1">Du er ikke der for å overbevise skeptikere. Du er der for å bekrefte et inntrykk de allerede har.
+
+De valgte deg til andre runde av 41 søkere. De vil at du skal lykkes.
+
+Vær deg selv. Varm, jordnær, faglig trygg.
+
+Ikke overforbered deg til det punktet at du høres innøvd ut. Struktur ja — manus nei.</textarea>
+      <div class="btn-row"><button class="btn btn-edit" onclick="toggleEditStatic(this)">Rediger</button></div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+const defaultTexts = {};
+
+function showSection(id, btn) {
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  btn.classList.add('active');
+  window.scrollTo(0, 0);
+}
+
+function toggleAnswer(btn) {
+  const box = btn.closest('.card').querySelector('.answer-box');
+  const isVisible = box.classList.contains('visible');
+  box.classList.toggle('visible', !isVisible);
+  btn.textContent = isVisible ? 'Vis svar' : 'Skjul svar';
+}
+
+function toggleEdit(btn) {
+  const card = btn.closest('.card');
+  const answerBox = card.querySelector('.answer-box');
+  const editBox = card.querySelector('.edit-box');
+  const isEditing = editBox.classList.contains('visible');
+  if (isEditing) {
+    answerBox.textContent = editBox.value;
+    answerBox.classList.add('visible');
+    editBox.classList.remove('visible');
+    btn.textContent = 'Rediger';
+    const key = answerBox.getAttribute('data-key');
+    if (key) { try { localStorage.setItem('reg_' + key, editBox.value); } catch(e){} }
+  } else {
+    editBox.value = answerBox.textContent;
+    editBox.classList.add('visible');
+    answerBox.classList.remove('visible');
+    btn.textContent = 'Lagre';
+    const showBtn = btn.previousElementSibling;
+    if (showBtn) { showBtn.textContent = 'Vis svar'; }
+  }
+}
+
+function toggleEditStatic(btn) {
+  const card = btn.closest('.card');
+  const answerBox = card.querySelector('.answer-box');
+  const editBox = card.querySelector('.edit-box');
+  const isEditing = editBox.classList.contains('visible');
+  if (isEditing) {
+    answerBox.textContent = editBox.value;
+    answerBox.classList.add('visible');
+    editBox.classList.remove('visible');
+    btn.textContent = 'Rediger';
+    const key = answerBox.getAttribute('data-key');
+    if (key) { try { localStorage.setItem('reg_' + key, editBox.value); } catch(e){} }
+  } else {
+    editBox.value = answerBox.textContent;
+    editBox.classList.add('visible');
+    answerBox.classList.remove('visible');
+    btn.textContent = 'Lagre';
+  }
+}
+
+document.querySelectorAll('.answer-box[data-key]').forEach(box => {
+  const key = box.getAttribute('data-key');
+  try {
+    const saved = localStorage.getItem('reg_' + key);
+    if (saved) {
+      box.textContent = saved;
+      const editBox = box.closest('.card').querySelector('.edit-box');
+      if (editBox) editBox.value = saved;
+    }
+  } catch(e) {}
+});
+
+let checkItems = JSON.parse(localStorage.getItem('reg_check_items') || 'null') || [
+  "Send e-post til Røhn om PC/penn til caset",
+  "Sjekk reisetid til Haraldrudveien 20 — ikke rådhuset",
+  "Ankom minst 10 minutter tidlig",
+  "Ta med penn og papir til caset",
+  "Ha CV-utskrift tilgjengelig",
+  "Les gjennom MAP-rapporten en gang til",
+  "Gå gjennom de tre signalsetningene høyt",
+  "Sov godt natten før"
+];
+
+function renderChecks() {
+  const container = document.getElementById('checks');
+  const savedChecks = JSON.parse(localStorage.getItem('reg_checks') || '{}');
+  container.innerHTML = '';
+  checkItems.forEach((text, i) => {
+    const row = document.createElement('div');
+    row.className = 'check-row';
+    const cb = document.createElement('input');
+    cb.type = 'checkbox';
+    cb.id = 'c' + i;
+    cb.checked = savedChecks[i] || false;
+    cb.addEventListener('change', e => {
+      const sc = JSON.parse(localStorage.getItem('reg_checks') || '{}');
+      sc[i] = e.target.checked;
+      try { localStorage.setItem('reg_checks', JSON.stringify(sc)); } catch(e){}
+    });
+    const lbl = document.createElement('label');
+    lbl.htmlFor = 'c' + i;
+    lbl.textContent = text;
+    row.appendChild(cb);
+    row.appendChild(lbl);
+    container.appendChild(row);
+  });
+}
+
+function toggleSjekkliste(btn) {
+  const editBox = document.getElementById('sjekkliste-edit');
+  const isEditing = editBox.classList.contains('visible');
+  if (isEditing) {
+    checkItems = editBox.value.split('\n').map(s => s.trim()).filter(s => s.length > 0);
+    try { localStorage.setItem('reg_check_items', JSON.stringify(checkItems)); } catch(e){}
+    renderChecks();
+    editBox.classList.remove('visible');
+    btn.textContent = 'Rediger sjekkliste';
+  } else {
+    editBox.value = checkItems.join('\n');
+    editBox.classList.add('visible');
+    btn.textContent = 'Lagre';
+  }
+}
+
+renderChecks();
+</script>
+</body>
+</html>
